@@ -26,7 +26,7 @@ Table 2 : Sales
 | name          | varchar(30) | YES  |     | NULL    |       |
 | reg_no        | varchar(20) | YES  |     | NULL    |       |
 | mail_id       | varchar(30) | YES  |     | NULL    |       |
-| mobile_no     | int(10)     | YES  |     | NULL    |       |
+| mobile_no     | varchar(10) | YES  |     | NULL    |       |
 | college       | varchar(30) | YES  |     | NULL    |       |
 | pay_mode      | varchar(6)  | YES  |     | NULL    |       |
 | location_sale | varchar(15) | YES  |     | NULL    |       |
