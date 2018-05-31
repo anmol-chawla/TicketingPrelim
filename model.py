@@ -2,7 +2,7 @@ import pymysql.cursors
 
 connection = pymysql.connect(host='localhost',
                              user='anmol',
-                             password='golmol',
+                             password='<pass>',
                              db='aadb',
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)

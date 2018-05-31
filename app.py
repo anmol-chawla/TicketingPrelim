@@ -11,7 +11,7 @@ from itsdangerous import (TimedJSONWebSignatureSerializer as Serializer, BadSign
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'the quick brown fox jumps over the lazy dog'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://anmol:golmol@localhost/aadb'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://anmol:<pass>@localhost/aadb'
 db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
