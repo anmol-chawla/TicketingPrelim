@@ -1,8 +1,12 @@
+import re
 from flask import Flask, request, jsonify, g, url_for, render_template, redirect, session
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_sqlalchemy import SQLAlchemy
 from passlib.apps import custom_app_context as pwd_context
 from model import insert_data, check_user
+from uuid_create import dict_to_uuid
+from qr_create import create_qrcode
+from email_send import send_email
 from itsdangerous import (TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired)
 
 app = Flask(__name__)
@@ -80,17 +84,32 @@ def do_sale():
 def enter_data():
     if request.method == "POST":
         try:
-            id = request.form.get('id')
+            user_info = {}
             name = request.form.get('name')
             reg_no = request.form.get('reg_no')
             mail_id = request.form.get('mail_id')
             phone = request.form.get('phone')
             college = request.form.get('college')
             pay_mode = request.form.get('pay_mode')
-            type = request.form.get('type')
+            event_type = request.form.get('type')
             location = request.form.get('location')
             pch = request.form.get('pch')
-            insert_data(id, name, reg_no, mail_id, phone, college, pay_mode, location, type, pch)
+            user_info['name'] = name
+            user_info['reg_no'] = reg_no
+            user_info['mail_id'] = mail_id
+            user_info['phone'] = phone
+            user_info['college'] = college
+            user_info['pay_mode'] = pay_mode
+            user_info['event_type'] = event_type
+            user_info['location'] = location
+            user_info['pch'] = pch
+            id = dict_to_uuid(user_info)
+            if insert_data(id, name, reg_no, mail_id, phone, college, pay_mode, location, event_type, pch):
+                create_qrcode(id)
+                if not re.match(r"[^@\s]+@[^@\s]+\.[a-zA-Z0-9]+$", mail_id):
+                    return "Incorrect Email"
+                send_email(mail_id, ('QRCodes/' + id + '.png'))
+                return 'Mail Sent'
             return "Success"
         except Exception as e:
             return jsonify({
